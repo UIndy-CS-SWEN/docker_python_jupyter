@@ -1,7 +1,12 @@
 # docker_environment1
 
 This project contains a docker image that includes the following NLP, Data Science or Machine Learning Python libraries.
-Numpy, Scipy, Scikit-learn, PyTorch, Pandas, Matplotlib
+- Numpy
+- Scipy
+- Scikit-learn
+- PyTorch
+- Pandas
+- Matplotlib
 
 ## Getting started
 
