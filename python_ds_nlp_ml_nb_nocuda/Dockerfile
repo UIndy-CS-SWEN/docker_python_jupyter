@@ -55,6 +55,10 @@ RUN pip --version
 RUN pip install jupyterlab \
 	&& pip install notebook
 
+# install ipywidgets
+RUN pip install ipywidgets
+
+
 
 # Create a non-root user and switch to it
 RUN adduser --disabled-password --gecos '' --shell /bin/bash user \
@@ -89,13 +93,11 @@ RUN pip install -U pip setuptools wheel
 # install numpy scipy matplotlib ipython pandas 
 RUN pip install --user -U numpy scipy scikit-learn matplotlib ipython pandas 
 
-# install text-normalizer
-#RUN pip install text-normalizer
-
-# install NLP lib: nltk spacy
-RUN pip install --user -U nltk spacy
-#RUN python -m spacy download en_core_web_sm
-RUN pip install "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.0/en_core_web_sm-2.2.0.tar.gz"
+# install NLP lib: nltk
+RUN pip install --user -U nltk
+# install NLP lib: spacy
+RUN pip install --user -U spacy
+RUN python -m spacy download en_core_web_sm
 
 # install
 RUN pip install --user -U torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
