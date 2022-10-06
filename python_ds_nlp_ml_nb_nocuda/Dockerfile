@@ -93,6 +93,9 @@ RUN pip install -U pip setuptools wheel
 # install numpy scipy matplotlib ipython pandas 
 RUN pip install --user -U numpy scipy scikit-learn matplotlib ipython pandas 
 
+# install the gensim
+RUN pip install --user --upgrade gensim
+
 # install NLP lib: nltk
 RUN pip install --user -U nltk
 # install NLP lib: spacy
