@@ -1,4 +1,4 @@
-# docker_environment1
+# Docker environments for NLP libraries
 
 This project contains a docker image that includes the following NLP, Data Science or Machine Learning Python libraries.
 - Numpy
