@@ -58,7 +58,8 @@ RUN pip install jupyterlab \
 # install ipywidgets
 RUN pip install ipywidgets
 
-
+# install Excel package
+RUN pip install xlrd
 
 # Create a non-root user and switch to it
 RUN adduser --disabled-password --gecos '' --shell /bin/bash user \
@@ -104,6 +105,9 @@ RUN python -m spacy download en_core_web_sm
 
 # install
 RUN pip install --user -U torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
+
+# install tensorflow and keras
+RUN pip install --user -U tensorflow
 
 #ARG PYTHON_VERSION=3.9
 ARG PYTHON_VERSION=3.10

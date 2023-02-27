@@ -1,5 +1,6 @@
 # syntax=docker/dockerfile:1
-FROM ubuntu:21.10
+#
+FROM ubuntu:22.04
 
 ARG DEBIAN_FRONTEND="noninteractive"
 
@@ -21,20 +22,21 @@ RUN apt-get update \
     sudo \
     git \
     bzip2 \
+    locales \
     libx11-6 \
-    && apt-get -y autoclean
+    software-properties-common \
+    && apt-get -y autoclean \
+    && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
+    && locale-gen
     
-    
-# install python3.9 (in the system using root)
-RUN apt-get install -y python3.9 python3.9-distutils
 
 # install pip (in the system using root)
-RUN ln -s /usr/bin/python3.9 /usr/bin/python
+RUN ln -s /usr/bin/python3.10 /usr/bin/python
 
 # install pip
-RUN wget https://bootstrap.pypa.io/get-pip.py \
-    && python3.9 get-pip.py \ 
-    && python3.9 -m pip install --upgrade pip
+RUN apt-get install -y python3-pip
+RUN pip3 --version
+RUN pip --version
 
 
 # Create a non-root user and switch to it
