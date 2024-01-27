@@ -1,12 +1,7 @@
-#
-# The jupyter's docker image file refers to 
-# https://github.com/jupyter/docker-stacks/tree/main/base-notebook
-#
-# The machine learning docker image file refers to
-# https://github.com/borundev/machine_learning_docker/tree/master/multiple_conda_environments
-# syntax=docker/dockerfile:1
-#
-FROM ubuntu:22.04
+#FROM ubuntu:22.04
+#nvidia/cuda:12.3.1-base-ubuntu22.04
+ARG CUDA_VERSION=12.3.1
+FROM nvidia/cuda:${CUDA_VERSION}-base-ubuntu22.04
 
 ARG DEBIAN_FRONTEND="noninteractive"
 #ARG NB_USER="jovyan"
@@ -29,6 +24,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get update \
     && apt-get install -y \
     curl \
+    vim \
     wget \
     ca-certificates \
     sudo \
@@ -40,7 +36,15 @@ RUN apt-get update \
     && apt-get -y autoclean \
     && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
     && locale-gen
-    
+
+# Installing Nvidia Tool-kit
+RUN curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | \
+    sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+    && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+    sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+    sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+RUN sed -i -e '/experimental/ s/^#//g' /etc/apt/sources.list.d/nvidia-container-toolkit.list
+RUN apt-get update && apt-get install -y nvidia-container-toolkit
 
 # install pip (in the system using root)
 RUN ln -s /usr/bin/python3.10 /usr/bin/python
@@ -52,8 +56,7 @@ RUN pip3 --version
 RUN pip --version
 
 # use pip to install Jupyter
-RUN pip install jupyterlab \
-	&& pip install notebook
+RUN pip install notebook
 
 # install ipywidgets
 RUN pip install ipywidgets
@@ -65,6 +68,7 @@ RUN pip install xlrd
 RUN adduser --disabled-password --gecos '' --shell /bin/bash user \
  && chown -R user:user /home/app
 RUN echo "user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/90-user
+
 
 # Configure environment
 ENV CONDA_DIR=/opt/conda \
@@ -91,25 +95,18 @@ ENV PATH "$PATH:/home/user/.local/bin"
 # deal with pip
 RUN pip install -U pip setuptools wheel
 
-# install numpy scipy matplotlib ipython pandas 
-RUN pip install --user -U numpy scipy scikit-learn matplotlib ipython pandas 
+# install numpy scipy matplotlib ipython pandas nltk
+RUN pip install --user -U numpy scipy scikit-learn matplotlib ipython pandas nltk
 
 # install the gensim
 RUN pip install --user --upgrade gensim
 
-# install NLP lib: nltk
-RUN pip install --user -U nltk
-# install NLP lib: spacy
-RUN pip install --user -U spacy
-RUN python -m spacy download en_core_web_sm
-
 # install
-RUN pip install --user -U torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
+RUN pip install --user -U torch torchvision torchaudio
 
 # install tensorflow and keras
-RUN pip install --user -U tensorflow
+RUN pip install --user -U tensorflow==2.2.0
 
-#ARG PYTHON_VERSION=3.9
 ARG PYTHON_VERSION=3.10
 
 USER root
@@ -118,16 +115,8 @@ USER root
 COPY start-notebook-unsecure.sh /usr/local/bin/
 RUN chmod 777 /usr/local/bin/start-notebook-unsecure.sh
 
-## HEALTHCHECK documentation: https://docs.docker.com/engine/reference/builder/#healthcheck
-## This healtcheck works well for `lab`, `notebook`, `nbclassic`, `server` and `retro` jupyter commands
-## https://github.com/jupyter/docker-stacks/issues/915#issuecomment-1068528799
-#HEALTHCHECK  --interval=15s --timeout=3s --start-period=5s --retries=3 \
-#    CMD wget -O- --no-verbose --tries=1 --no-check-certificate \
-#    http${GEN_CERT:+s}://localhost:8888${JUPYTERHUB_SERVICE_PREFIX:-/}api || exit 1
 
 USER user
-
-
 EXPOSE 8888
 
 CMD ["/usr/local/bin/start-notebook-unsecure.sh"]
