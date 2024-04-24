@@ -50,7 +50,7 @@ COPY fix-permissions /usr/local/bin/fix-permissions
 RUN chmod a+rx /usr/local/bin/fix-permissions
 
 # Fix permissions on /etc/jupyter as root
-RUN fix-permissions /etc/jupyter/
+#RUN fix-permissions /etc/jupyter/
 
 EXPOSE 8888
 
