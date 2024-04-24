@@ -32,7 +32,7 @@ RUN pip install jupyterlab
 
 # Fix permissions on /etc/jupyter as root
 USER root
-RUN fix-permissions /etc/jupyter/
+#RUN fix-permissions /etc/jupyter/
 
 
 

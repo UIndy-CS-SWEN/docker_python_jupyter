@@ -5,8 +5,8 @@ docker stop $(docker ps -a -q)
 docker rm $(docker ps -a -q)
 
 #remove the image called "ubuntu" and "python-ds-nlp-ml-nb"
-docker image rm $(docker image ls | grep 'py3_jupyter' | awk '{print $3}')
-docker image rm $(docker image ls | grep 'ubuntu' | awk '{print $3}')
+docker image rm -f $(docker image ls | grep 'py3_jupyter' | awk '{print $3}')
+docker image rm -f $(docker image ls | grep 'nvidia' | awk '{print $3}')
 
 docker build -t py3_jupyter .
 
