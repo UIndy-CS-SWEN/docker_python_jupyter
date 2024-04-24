@@ -17,5 +17,8 @@ RUN apt-get update \
 
 RUN pip install torch torchvision torchaudio
 RUN pip install jupyterlab
+
+EXPOSE 8888
+
 #RUN pip install --user --upgrade gensim
 #RUN pip install --user -U scikit-learn pandas nltk
