@@ -51,9 +51,13 @@ ENTRYPOINT [ "/usr/local/bin/start.sh" ]
 # Copy a script that we will use to correct permissions after running certain commands
 COPY fix-permissions /usr/local/bin/fix-permissions
 RUN chmod a+rx /usr/local/bin/fix-permissions
+RUN mkdir -p /etc/jupyter
+COPY jupyter_server_config.py /etc/jupyter/
 
 # Fix permissions on /etc/jupyter as root
-#RUN fix-permissions /etc/jupyter/
+USER root
+RUN fix-permissions /etc/jupyter/
+
 
 EXPOSE 8888
 
