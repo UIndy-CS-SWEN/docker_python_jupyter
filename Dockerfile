@@ -13,10 +13,7 @@ RUN apt-get update \
     vim \
     python3 \
     python-is-python3 \
-    pip \
-    && apt-get -y autoclean \
-    && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
-    && locale-gen
+    pip 
 
 RUN pip install torch torchvision torchaudio
 #RUN pip install --user --upgrade gensim
