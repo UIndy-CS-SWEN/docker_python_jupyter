@@ -43,7 +43,12 @@ RUN pip install --user -U scikit-learn pandas matplotlib
 
 # Copy local files as late as possible to avoid cache busting
 COPY start-lab-unsecure.sh /usr/local/bin/
+COPY start.sh /usr/local/bin/
 RUN chmod 777 /usr/local/bin/start-lab-unsecure.sh
+RUN chmod 777 /usr/local/bin/start.sh
+# Note the json syntax on this next line is strict, double quotes, and any syntax
+# error will result in a shell being used to run the line.
+ENTRYPOINT [ "/usr/local/bin/start.sh" ]
 
 # Copy a script that we will use to correct permissions after running certain commands
 COPY fix-permissions /usr/local/bin/fix-permissions
@@ -54,5 +59,6 @@ RUN chmod a+rx /usr/local/bin/fix-permissions
 
 EXPOSE 8888
 
-CMD ["/usr/local/bin/start-lab-unsecure.sh"]
+#CMD ["/usr/local/bin/start-lab-unsecure.sh"]
+
 

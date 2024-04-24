@@ -2,15 +2,15 @@
 ## Docker environments for Jupyter with ML libraries (with Cuda GPU supports)
 This project contains a docker image that includes the following NLP, Data Science or Machine Learning Python libraries.
 - Numpy
-- TensorFlow
+- TensorFlow (2.16.1 cuda 12.2)
 - Scikit-learn
-- PyTorch
+- PyTorch (2.2.2 cuda 12.1 can support 12.2)
 - Pandas
 - Matplotlib
-- NLTK
 
 *NOTE#1: This require around 20G for building image*
 *NOTE#2: The docker container is inspired by the following command
+*NOTE#3: The tensorflow might has issues in using GPU
 ```
 docker run --rm -itd --gpus all -p 8888:8888 -v $(pwd)/docker-data:/content tensorflow/tensorflow:2.10.1-gpu-jupyter jupyter notebook --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password='argon2:$argon2id$v=19$m=10240,t=10,p=8$gu1oaVTudqMVaMY+ufyldg$dXMYv+IMfcsfNv9ZiEReHp4KoXEb0bW0o8qYFUU13hg' 
 ```
