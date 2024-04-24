@@ -1,5 +1,5 @@
 # Introduction
-## Docker environments for Jupyter with ML libraries (with Cuda GPU supports)
+## Docker environments for Jupyter LAB with ML libraries (with Cuda GPU supports)
 This project contains a docker image that includes the following NLP, Data Science or Machine Learning Python libraries.
 - Numpy
 - TensorFlow (2.16.1 cuda 12.2)
