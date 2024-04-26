@@ -39,7 +39,7 @@ RUN pip install jupyterlab
 RUN pip install tensorflow
 
 #RUN pip install --user --upgrade gensim
-RUN pip install --user -U scikit-learn pandas matplotlib
+RUN pip install --user -U scikit-learn pandas matplotlib seaborn
 
 # Copy local files as late as possible to avoid cache busting
 COPY start.sh /usr/local/bin/
