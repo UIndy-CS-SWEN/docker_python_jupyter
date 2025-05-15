@@ -81,10 +81,10 @@ torch.cuda.is_available()
   - ```sudo docker run --rm --runtime=nvidia --gpus all ubuntu nvidia-smi```
   - If you see error ```Failed to initialize NVML: Unknown Error```
     - Check this page https://forums.developer.nvidia.com/t/nvida-container-toolkit-failed-to-initialize-nvml-unknown-error/286219
-      ```/etc/nvidia-container-runtime/config.toml```
-      ```no-cgroups = false```
-      ```sudo systemctl restart docker```
-      ```sudo docker run --rm --gpus all nvidia/cuda:11.0-base nvidia-smi```
+      - ```/etc/nvidia-container-runtime/config.toml```
+      - ```no-cgroups = false```
+      - ```sudo systemctl restart docker```
+      - ```sudo docker run --rm --gpus all nvidia/cuda:11.0-base nvidia-smi```
 
 # Under Development
 ## python_jupyter_backup
