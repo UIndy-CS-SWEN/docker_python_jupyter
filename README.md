@@ -73,6 +73,12 @@ import torch
 torch.cuda.is_available() 
 ```
 
+### Use GPU in the container
+- When starting up containers with GPU support and see the error message "docker: Error response from daemon: could not select device driver "" with capabilities: [[gpu]] ".
+- You need to install the NVIDIA Container Toolkit
+- https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
+
 # Under Development
 ## python_jupyter_backup
 The folder contains the jupyter image that will be built from scratch. It is still under-developed (1/27/2024)
+
