@@ -12,7 +12,7 @@ This project contains a docker image that includes the following NLP, Data Scien
 *NOTE#2: The docker container is inspired by the following command
 *NOTE#3: The tensorflow might has issues in using GPU
 ```
-docker run --rm -itd --gpus all -p 8888:8888 -v $(pwd)/docker-data:/content tensorflow/tensorflow:2.10.1-gpu-jupyter jupyter notebook --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password='argon2:$argon2id$v=19$m=10240,t=10,p=8$gu1oaVTudqMVaMY+ufyldg$dXMYv+IMfcsfNv9ZiEReHp4KoXEb0bW0o8qYFUU13hg' 
+docker run --rm -itd --gpus all -p 8888:8888 -v $(pwd)/docker-data:/content tensorflow/tensorflow:2.10.1-gpu-jupyter jupyter lab --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password='argon2:$argon2id$v=19$m=10240,t=10,p=8$gu1oaVTudqMVaMY+ufyldg$dXMYv+IMfcsfNv9ZiEReHp4KoXEb0bW0o8qYFUU13hg' 
 ```
 # Install Nvidia Container Toolkit for Docker container's GPU support
 - When starting up containers with GPU support and see the error message "docker: Error response from daemon: could not select device driver "" with capabilities: [[gpu]] ".
