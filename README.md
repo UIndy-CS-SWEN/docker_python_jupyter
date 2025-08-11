@@ -14,6 +14,11 @@ This project contains a docker image that includes the following NLP, Data Scien
 ```
 docker run --rm -itd --gpus all -p 8888:8888 -v $(pwd)/docker-data:/content tensorflow/tensorflow:2.10.1-gpu-jupyter jupyter notebook --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password='argon2:$argon2id$v=19$m=10240,t=10,p=8$gu1oaVTudqMVaMY+ufyldg$dXMYv+IMfcsfNv9ZiEReHp4KoXEb0bW0o8qYFUU13hg' 
 ```
+# Install Nvidia Container Toolkit for Docker container's GPU support
+- When starting up containers with GPU support and see the error message "docker: Error response from daemon: could not select device driver "" with capabilities: [[gpu]] ".
+- **You need to install the NVIDIA Container Toolkit**
+- https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
+
 
 # Getting started
 ```
@@ -28,16 +33,22 @@ docker build -t py3_jupyter .
 ## To Run
 ### No Password, Token and IP binding
 ```
-docker run --rm -itd --gpus all -p 8888:8888 -v $(pwd)/docker-data:/content py3_jupyter jupyter notebook --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password='' 
+docker run --rm -itd --gpus all -p 8888:8888 -v $(pwd)/docker-data:/content py3_jupyter jupyter lab --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password='' 
+```
+
+### With device supports. This is often used when multiple cards are installed or the GPU is not fully supports. 
+
+```
+docker run --rm -itd --gpus all --device /dev/nvidia0:/dev/nvidia0 --device /dev/nvidiactl:/dev/nvidiactl  --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools  -p 8888:8888 -v $(pwd)/docker-data:/content py3_jupyter jupyter lab --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
 ```
 
 ### Use Password but no Token and IP binding
 ```
-docker run --rm -itd --gpus all -p 8888:8888 -v $(pwd)/docker-data:/content py3_jupyter jupyter notebook --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password='argon2:$argon2id$v=19$m=10240,t=10,p=8$gu1oaVTudqMVaMY+ufyldg$dXMYv+IMfcsfNv9ZiEReHp4KoXEb0bW0o8qYFUU13hg' 
+docker run --rm -itd --gpus all -p 8888:8888 -v $(pwd)/docker-data:/content py3_jupyter jupyter lab --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password='argon2:$argon2id$v=19$m=10240,t=10,p=8$gu1oaVTudqMVaMY+ufyldg$dXMYv+IMfcsfNv9ZiEReHp4KoXEb0bW0o8qYFUU13hg' 
 ```
 ### Use high IO
 ```
-docker run --rm -itd --gpus all -p 8888:8888 -v $(pwd)/docker-data:/content py3_jupyter jupyter notebook --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password='argon2:$argon2id$v=19$m=10240,t=10,p=8$gu1oaVTudqMVaMY+ufyldg$dXMYv+IMfcsfNv9ZiEReHp4KoXEb0bW0o8qYFUU13hg' --NotebookApp.iopub_data_rate_limit=10000000000
+docker run --rm -itd --gpus all -p 8888:8888 -v $(pwd)/docker-data:/content py3_jupyter jupyter lab --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password='argon2:$argon2id$v=19$m=10240,t=10,p=8$gu1oaVTudqMVaMY+ufyldg$dXMYv+IMfcsfNv9ZiEReHp4KoXEb0bW0o8qYFUU13hg' --NotebookApp.iopub_data_rate_limit=10000000000
 ```
 
 ## Password generation
@@ -73,18 +84,20 @@ import torch
 torch.cuda.is_available() 
 ```
 
-### Use GPU in the container
-- When starting up containers with GPU support and see the error message "docker: Error response from daemon: could not select device driver "" with capabilities: [[gpu]] ".
-- You need to install the NVIDIA Container Toolkit
-- https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
-- Troubleshooting:
-  - ```sudo docker run --rm --runtime=nvidia --gpus all ubuntu nvidia-smi```
-  - If you see error ```Failed to initialize NVML: Unknown Error```
-    - Check this page https://forums.developer.nvidia.com/t/nvida-container-toolkit-failed-to-initialize-nvml-unknown-error/286219
-      - ```/etc/nvidia-container-runtime/config.toml```
-      - ```no-cgroups = false```
-      - ```sudo systemctl restart docker```
-      - ```sudo docker run --rm --gpus all nvidia/cuda:11.0-base nvidia-smi```
+
+
+### Troubleshooting:
+- ```sudo docker run --rm --runtime=nvidia --gpus all ubuntu nvidia-smi```
+- If you see error ```Failed to initialize NVML: Unknown Error```
+  - Check this page https://forums.developer.nvidia.com/t/nvida-container-toolkit-failed-to-initialize-nvml-unknown-error/286219
+    - ```/etc/nvidia-container-runtime/config.toml```
+    - ```no-cgroups = false```
+    - ```sudo systemctl restart docker```
+    - ```sudo docker run --rm --gpus all nvidia/cuda:11.0-base nvidia-smi```
+
+- https://forums.developer.nvidia.com/t/nvida-container-toolkit-failed-to-initialize-nvml-unknown-error/286219
+
+
 
 # Under Development
 ## python_jupyter_backup
